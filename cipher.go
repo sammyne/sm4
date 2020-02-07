@@ -5,10 +5,10 @@ import (
 	"encoding/binary"
 )
 
-//go:generate go run generate_sbox.go
+//go:generate go run generate_parameter.go
 
 type sm4Cipher struct {
-	expandedKey [round]uint32
+	expandedKey [Round]uint32
 }
 
 // BlockSize returns the cipher's block size.
@@ -28,7 +28,7 @@ func (c *sm4Cipher) Decrypt(dst []byte, src []byte) {
 	x2 := binary.BigEndian.Uint32(src[8:12])
 	x3 := binary.BigEndian.Uint32(src[12:16])
 
-	for r := round - 1; r >= 0; r-- {
+	for r := Round - 1; r >= 0; r-- {
 		x0, x1, x2, x3 = x1, x2, x3, x0^rotBlockWord(subw(x1^x2^x3^c.expandedKey[r]))
 	}
 
@@ -51,7 +51,7 @@ func (c *sm4Cipher) Encrypt(dst []byte, src []byte) {
 	x2 := binary.BigEndian.Uint32(src[8:12])
 	x3 := binary.BigEndian.Uint32(src[12:16])
 
-	for r := 0; r < round; r++ {
+	for r := 0; r < Round; r++ {
 		x0, x1, x2, x3 = x1, x2, x3, x0^rotBlockWord(subw(x1^x2^x3^c.expandedKey[r]))
 	}
 
@@ -74,14 +74,14 @@ func NewCipher(key []byte) (cipher.Block, error) {
 	return c, nil
 }
 
-func expandKey(key []byte) [round]uint32 {
+func expandKey(key []byte) [Round]uint32 {
 	// Encryption key setup.
 	k0 := binary.BigEndian.Uint32(key[0:4]) ^ fk[0]
 	k1 := binary.BigEndian.Uint32(key[4:8]) ^ fk[1]
 	k2 := binary.BigEndian.Uint32(key[8:12]) ^ fk[2]
 	k3 := binary.BigEndian.Uint32(key[12:16]) ^ fk[3]
 
-	var expandedKey [round]uint32
+	var expandedKey [Round]uint32
 	for i := range expandedKey {
 		k0, k1, k2, k3 = k1, k2, k3, k0^rotKeyWord(subw(k1^k2^k3^ck[i]))
 		expandedKey[i] = k3
