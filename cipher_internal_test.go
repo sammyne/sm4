@@ -5,14 +5,14 @@ import "testing"
 func TestExpandKey(t *testing.T) {
 	testVector := []struct {
 		key    []byte
-		expect [roundKeysLen]uint32
+		expect [round]uint32
 	}{
 		{
 			[]byte{
 				0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef,
 				0xfe, 0xdc, 0xba, 0x98, 0x76, 0x54, 0x32, 0x10,
 			},
-			[roundKeysLen]uint32{
+			[round]uint32{
 				0xf12186f9,
 				0x41662b61,
 				0x5a6ab19a,
