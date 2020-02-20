@@ -1,7 +1,7 @@
-# Golang CircleCI 2.0 configuration file
+# Golang CircleCI 2.1 configuration file
 #
 # Check https://circleci.com/docs/2.0/language-go/ for more details
-version: 2
+version: 2.1
 jobs:
   build:
     docker:
@@ -27,4 +27,4 @@ jobs:
 
       # specify any bash command here prefixed with `run: `
       - run: go test -v -race $(go list ./... | grep -v /vendor/) -coverprofile=coverage.txt
-      - run: bash <(curl -s https://codecov.io/bash) -t eb772cac-b54d-4127-9d68-97ef52f4e8f7
+      - run: bash <(curl -s https://codecov.io/bash)
