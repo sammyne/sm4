@@ -27,4 +27,5 @@ jobs:
 
       # specify any bash command here prefixed with `run: `
       - run: go test -v -race $(go list ./... | grep -v /vendor/) -coverprofile=coverage.txt
+      # Codecov token isn't required for CircleCI
       - run: bash <(curl -s https://codecov.io/bash)
